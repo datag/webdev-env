@@ -1,0 +1,6 @@
+[submodule "pkg"]
+	path = pkg
+	url = https://github.com/datag/pkgbox-packages.git
+[submodule "pkgbox"]
+	path = pkgbox
+	url = https://github.com/datag/pkgbox.git

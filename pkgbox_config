@@ -1,0 +1,25 @@
+# pkgbox webdev-env configuration
+################################################################################
+
+# pkgbox directories
+O[base]="$PWD/pkgbox_base"
+O[packages]="$PWD/pkg"
+O[download]="${O[base]}/download"
+O[build]="${O[base]}/build"
+
+# installation directory
+O[prefix]="/opt/webdev-env"
+
+# variables for Configure scripts
+O[CFLAGS]="-march=native -O2 -pipe"
+O[CXXFLAGS]="${O[CFLAGS]}"
+O[CPPFLAGS]="-I${O[prefix]}/include"
+O[LDFLAGS]="-L${O[prefix]}/lib"
+O[EXTRA_LDFLAGS_PROGRAM]=
+O[LIBS]=
+O[CC]=
+O[CXX]=${O[CC]}
+
+# options for Make
+O[make_opts]="-j3"
+
