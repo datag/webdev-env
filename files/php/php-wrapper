@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# PHP wrapper script for use with Apache mod_fcgid
+# see http://httpd.apache.org/mod_fcgid/mod/mod_fcgid.html
+
+# determine PHP version
+regex='^php-(PHP-[0-9a-zA-Z_\-\.]+|[0-9a-zA-Z_\.]+)-wrapper$'
+if [[ ${0##*/} =~ $regex ]]; then
+	PHPVERSION=${BASH_REMATCH[1]}
+else
+	echo "No PHP version in scriptname provided. Try 'ln -s php-wrapper php-5.3.21-wrapper'." >&2
+	exit 1
+fi
+
+PHPDIR={{WEBDEV_ENV_PATH}}/local/php-$PHPVERSION
+
+###############################################################################
+
+export PHP_FCGI_MAX_REQUESTS=10000
+
+exec $PHPDIR/bin/php-cgi

@@ -8,7 +8,7 @@ O[download]="${O[base]}/download"
 O[build]="${O[base]}/build"
 
 # installation directory
-O[prefix]="/opt/webdev-env"
+O[prefix]="$HOME/local/webdev-env"		#"/opt/webdev-env"
 
 # variables for Configure scripts
 O[CFLAGS]="-march=native -O2 -pipe"
@@ -22,4 +22,20 @@ O[CXX]=${O[CC]}
 
 # options for Make
 O[make_opts]="-j3"
+
+
+# feature defaults
+FEATURES+=(
+	"nls"						# Native language support
+	"unicode"					# Unicode support
+	"ipv6"						# IPv6 support
+	"ssl=/usr"						# SSL support
+	"devrandom=/dev/urandom"	# Set random device, e.g. /dev/urandom
+	
+	
+# Build/config tools
+	"apr=${O[prefix]}"
+	"apr-util=${O[prefix]}"
+	"apxs=${O[prefix]}/bin/apxs"
+)
 
