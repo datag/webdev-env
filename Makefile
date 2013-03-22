@@ -206,11 +206,17 @@ php-%_config: php-%_install
 # build extensions for all PHP instances by default
 php_extensions: $(PHP:%=zend_optimizerplus_%) $(PHP:%=xdebug_%)
 
-# enable PHP Zend extension; (CONFIG_load_zend_extension,title,extension,PHP-version)
-define CONFIG_load_zend_extension =
+# enable PHP Zend extension; (CONFIG_load_zend_extension,title,extension,PHP-target)
+define CONFIG_load_zend_extension
 @if ! grep -qs "$(2)" $(PREFIX)/local/$(3)/etc/conf.d/extensions.ini; then \
 	echo "=== Enabling Zend extension '$(1)' ($(2)) for $(3) ==="; \
-	echo -e "; $(1)\nzend_extension = $(shell $(PREFIX)/local/$(3)/bin/php-config --extension-dir)/$(2)\n" >>$(PREFIX)/local/$(3)/etc/conf.d/extensions.ini; \
+	{ \
+		echo; echo "; $(1)"; \
+		echo "zend_extension = $(shell $(PREFIX)/local/$(3)/bin/php-config --extension-dir)/$(2)"; \
+		echo; \
+	} >>$(PREFIX)/local/$(3)/etc/conf.d/extensions.ini; \
+else \
+	echo "Zend extension '$(1)' is already enabled for $(3), skipping..."; \
 fi
 endef
 
