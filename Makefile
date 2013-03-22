@@ -40,12 +40,16 @@ config_replace:
 		-e 's/{{WEBDEV_ENV_HTTPS_PORT}}/$(HTTPS_PORT)/g' \
 		-e 's/{{WEBDEV_ENV_FCGID_DEFAULT_PHP_WRAPPER}}/$(subst /,\/,$(FCGID_DEFAULT_PHP_WRAPPER))/g'
 
-config_demo_index:
+config_demo_index: $(PREFIX)/var/www/index.php
 	mkdir -p $(PREFIX)/var/www
 	echo '<?php phpinfo();' >$(PREFIX)/var/www/index.php
 
 clean:
-	-[ -n "$(PKGBOX_BUILD)" ] && rm -rf $(PKGBOX_BUILD)/* || echo "Oops... PKGBOX_BUILD not defined!"
+ifneq (,$(PKGBOX_BUILD))
+	-rm -rf "$(PKGBOX_BUILD)"
+else
+	$(error "Oops... PKGBOX_BUILD not defined or empty!")
+endif
 
 
 ################################################################################
@@ -170,7 +174,9 @@ php-%_build:
 		$(PHP_PKG) compile
 
 php-%_install: php-%_build
-	$(PKGBOX) -V $(call php_tgt2ver,$(@:%_install=%)) -D prefix=$(PREFIX)/local/php-$(call php_tgt2ver,$(@:%_install=%)) $(PHP_PKG) install
+	$(PKGBOX) -V $(call php_tgt2ver,$(@:%_install=%)) \
+		-D prefix=$(PREFIX)/local/php-$(call php_tgt2ver,$(@:%_install=%)) \
+		$(PHP_PKG) install
 
 php-%_config: php-%_install
 	@#echo CONFIG for $(@:%_config=%) version $(call php_tgt2ver,$(@:%_config=%))
