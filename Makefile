@@ -56,9 +56,15 @@ PHP_master_VERSION = master
 # PHP instances to build
 PHP = php-53 php-54 php-55 php-master
 
+ZEND_OPTIMIZERPLUS_PKG = dev-php/pecl-zendoptimizerplus
+ZEND_OPTIMIZERPLUS_VERSION = master
+
+XDEBUG_PKG = dev-php/xdebug
+XDEBUG_VERSION = 2.2.1
+
 ################################################################################
 
-all: apache apache_modules subversion php post_config
+all: apache apache_modules subversion php php_extensions post_config
 
 post_config:
 	find $(PREFIX) -type f | xargs sed -i 's/{{WEBDEV_ENV_PATH}}/$(subst /,\/,$(PREFIX))/g'
@@ -172,7 +178,12 @@ php-%: php_commonsetup php-%_config
 	@echo Done with PHP $@ version $($(subst php-,PHP_,$@)_VERSION)
 
 php-%_build:
-	$(PKGBOX) -V $(call php_tgt2ver,$(@:%_build=%)) -D prefix=$(PREFIX)/local/php-$(call php_tgt2ver,$(@:%_build=%)) $(PHP_PKG) compile
+	$(PKGBOX) -V $(call php_tgt2ver,$(@:%_build=%)) \
+		-D prefix=$(PREFIX)/local/php-$(call php_tgt2ver,$(@:%_build=%)) \
+		-F -apxs \
+		-F php:config-file-path=$(PREFIX)/local/php-$(call php_tgt2ver,$(@:%_build=%))/etc \
+		-F php:config-file-scan-dir=$(PREFIX)/local/php-$(call php_tgt2ver,$(@:%_build=%))/etc/conf.d \
+		$(PHP_PKG) compile
 
 php-%_install: php-%_build
 	$(PKGBOX) -V $(call php_tgt2ver,$(@:%_install=%)) -D prefix=$(PREFIX)/local/php-$(call php_tgt2ver,$(@:%_install=%)) $(PHP_PKG) install
@@ -193,6 +204,42 @@ php-%_config: php-%_install
 	# fcgid-wrapper 
 	rm -f $(PREFIX)/local/bin/$(@:%_config=%)-wrapper
 	ln -s php-wrapper $(PREFIX)/local/bin/$(@:%_config=%)-wrapper
+
+################################################################################
+# PHP Extensions
+
+php_extensions: $(PHP:%=zend_optimizerplus_%) $(PHP:%=xdebug_%)
+
+# Zend OPcache (formerly Zend Optimizer+)
+# =======================================
+# FIXME: recent change: for php >= 55 (commit 34d3202edac0a56b91eb8a305fc1801bbd9b7653) Zend OPcache is already integrated
+$(PHP:%=zend_optimizerplus_%):
+	@echo "=== Zend Optimizer+ for $(@:zend_optimizerplus_%=%) version $(ZEND_OPTIMIZERPLUS_VERSION) ==="
+	$(PKGBOX) -V $(ZEND_OPTIMIZERPLUS_VERSION) \
+		-D build=$(PKGBOX_BUILD)/$(@:zend_optimizerplus_%=%) -D prefix=$(PREFIX)/local/$(@:zend_optimizerplus_%=%) \
+		-F phpize=$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/phpize -F php-config=$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/php-config \
+		$(ZEND_OPTIMIZERPLUS_PKG) install
+	
+	# append to extension-load-config (IMPORTANT: must be loaded _before_ Xdebug!)
+	echo -e "; Zend OPcache\nzend_extension = $(shell $(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/php-config --extension-dir)/opcache.so\n" \
+		>>$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/etc/conf.d/extensions.ini
+
+# Xdebug
+# ======
+$(PHP:%=xdebug_%):
+	@echo "=== Xdebug for $(@:xdebug_%=%) version $(XDEBUG_VERSION) ==="
+	$(PKGBOX) -V $(XDEBUG_VERSION) \
+		-D build=$(PKGBOX_BUILD)/$(@:xdebug_%=%) -D prefix=$(PREFIX)/local/$(@:xdebug_%=%) \
+		-F phpize=$(PREFIX)/local/$(@:xdebug_%=%)/bin/phpize -F php-config=$(PREFIX)/local/$(@:xdebug_%=%)/bin/php-config \
+		$(XDEBUG_PKG) install
+	
+	# append to extension-load-config
+	echo -e "; Xdebug\nzend_extension = $(shell $(PREFIX)/local/$(@:xdebug_%=%)/bin/php-config --extension-dir)/xdebug.so\n" \
+		>>$(PREFIX)/local/$(@:xdebug_%=%)/etc/conf.d/extensions.ini
+
+# 2.2.1 and master (2013-02-23) won't compile for PHP-5.5-dev and PHP-master
+xdebug_php-55 xdebug_php-master:
+	@echo "Xdebug $(XDEBUG_VERSION) for $(@:xdebug_%=%) won't compile; skipping..."
 
 ################################################################################
 
