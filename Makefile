@@ -36,7 +36,7 @@ config_replace:
 		-e 's/{{WEBDEV_ENV_WWW_GROUP}}/$(WWW_GROUP)/g' \
 		-e 's/{{WEBDEV_ENV_WWW_SERVER_NAME}}/$(WWW_SERVER_NAME)/g' \
 		-e 's/{{WEBDEV_ENV_WWW_SERVER_ADMIN}}/$(WWW_SERVER_ADMIN)/g' \
-		-e 's/{{WEBDEV_ENV_WWW_ROOTPATH}}/$(WWW_ROOTPATH)/g' \
+		-e 's/{{WEBDEV_ENV_WWW_ROOTPATH}}/$(subst /,\/,$(WWW_ROOTPATH))/g' \
 		-e 's/{{WEBDEV_ENV_HTTP_PORT}}/$(HTTP_PORT)/g' \
 		-e 's/{{WEBDEV_ENV_HTTPS_PORT}}/$(HTTPS_PORT)/g' \
 		-e 's/{{WEBDEV_ENV_FCGID_DEFAULT_PHP_WRAPPER}}/$(subst /,\/,$(FCGID_DEFAULT_PHP_WRAPPER))/g'
