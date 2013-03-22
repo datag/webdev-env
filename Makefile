@@ -19,48 +19,8 @@ PKGBOX = $(CURDIR)/pkgbox/pkgbox -vv -c "$(PKGBOX_CONFIG)"
 
 FILES = $(CURDIR)/files
 
-WWW_USER = $(USER)
-WWW_GROUP = $(USER)
-
-SUDO = sudo
-
-################################################################################
-
-APR_PKG = dev-libs/apr
-APR_VERSION = 1.4.6
-
-APR_UTIL_PKG = dev-libs/apr-util
-APR_UTIL_VERSION = 1.5.1
-
-SERF_PKG = net-libs/serf
-SERF_VERSION = 1.2.0
-
-APACHE_PKG = www-servers/apache
-APACHE_VERSION = 2.4.3
-
-MOD_FCGID_PKG = www-apache/mod_fcgid
-MOD_FCGID_VERSION = 2.3.7
-
-MOD_MACRO_PKG = www-apache/mod_macro
-MOD_MACRO_VERSION = 1.2.1
-
-SUBVERSION_PKG = dev-vcs/subversion
-SUBVERSION_VERSION = 1.7.8
-
-PHP_PKG = dev-lang/php
-PHP_53_VERSION = 5.3.23
-PHP_54_VERSION = 5.4.11
-PHP_55_VERSION = PHP-5.5
-PHP_master_VERSION = master
-
-# PHP instances to build
-PHP = php-53 php-54 php-55 php-master
-
-ZEND_OPTIMIZERPLUS_PKG = dev-php/pecl-zendoptimizerplus
-ZEND_OPTIMIZERPLUS_VERSION = master
-
-XDEBUG_PKG = dev-php/xdebug
-XDEBUG_VERSION = 2.2.1
+# include custom build/target options
+include config.mk
 
 ################################################################################
 
@@ -68,6 +28,9 @@ all: apache apache_modules subversion php php_extensions post_config
 
 post_config:
 	find $(PREFIX) -type f | xargs sed -i 's/{{WEBDEV_ENV_PATH}}/$(subst /,\/,$(PREFIX))/g'
+	
+	mkdir -p $(PREFIX)/var/www
+	echo '<?php phpinfo();' >$(PREFIX)/var/www/index.php
 
 clean:
 	-[ -n "$(PKGBOX_BUILD)" ] && rm -rf $(PKGBOX_BUILD)/* || echo "Oops... PKGBOX_BUILD not defined!"
@@ -210,10 +173,16 @@ php-%_config: php-%_install
 
 php_extensions: $(PHP:%=zend_optimizerplus_%) $(PHP:%=xdebug_%)
 
-# Zend OPcache (formerly Zend Optimizer+)
-# =======================================
-# FIXME: recent change: for php >= 55 (commit 34d3202edac0a56b91eb8a305fc1801bbd9b7653) Zend OPcache is already integrated
+# Zend Optimizer+ (now "Zend OPcache" and merged into >=PHP-5.5)
+# ==============================================================
 $(PHP:%=zend_optimizerplus_%):
+	@echo "Not building Zend Optimizer+ for $(@:zend_optimizerplus_%=%) as it's already integrated as Zend OPcache."
+		
+	# append to extension-load-config (IMPORTANT: must be loaded _before_ Xdebug!)
+	echo -e "; Zend OPcache\nzend_extension = $(shell $(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/php-config --extension-dir)/opcache.so\n" \
+		>>$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/etc/conf.d/extensions.ini
+
+zend_optimizerplus_php-53 zend_optimizerplus_php-54:
 	@echo "=== Zend Optimizer+ for $(@:zend_optimizerplus_%=%) version $(ZEND_OPTIMIZERPLUS_VERSION) ==="
 	$(PKGBOX) -V $(ZEND_OPTIMIZERPLUS_VERSION) \
 		-D build=$(PKGBOX_BUILD)/$(@:zend_optimizerplus_%=%) -D prefix=$(PREFIX)/local/$(@:zend_optimizerplus_%=%) \
@@ -238,8 +207,8 @@ $(PHP:%=xdebug_%):
 		>>$(PREFIX)/local/$(@:xdebug_%=%)/etc/conf.d/extensions.ini
 
 # 2.2.1 and master (2013-02-23) won't compile for PHP-5.5-dev and PHP-master
-xdebug_php-55 xdebug_php-master:
-	@echo "Xdebug $(XDEBUG_VERSION) for $(@:xdebug_%=%) won't compile; skipping..."
+#xdebug_php-55 xdebug_php-master:
+#	@echo "Xdebug $(XDEBUG_VERSION) for $(@:xdebug_%=%) won't compile; skipping..."
 
 ################################################################################
 
