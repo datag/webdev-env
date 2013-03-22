@@ -196,15 +196,20 @@ php-%_config: php-%_install
 # build extensions for all PHP instances by default
 php_extensions: $(PHP:%=zend_optimizerplus_%) $(PHP:%=xdebug_%)
 
+# enable PHP Zend extension; (CONFIG_load_zend_extension,title,extension,PHP-version)
+define CONFIG_load_zend_extension =
+@if ! grep -qs "$(2)" $(PREFIX)/local/$(3)/etc/conf.d/extensions.ini; then \
+	echo "=== Enabling Zend extension '$(1)' ($(2)) for $(3) ==="; \
+	echo -e "; $(1)\nzend_extension = $(shell $(PREFIX)/local/$(3)/bin/php-config --extension-dir)/$(2)\n" >>$(PREFIX)/local/$(3)/etc/conf.d/extensions.ini; \
+fi
+endef
 
 # Zend Optimizer+ (as of >=PHP-5.5 "Zend OPcache" and merged into PHP)
 # ====================================================================
 zend_optimizerplus_php-%:
 	@echo "Not building Zend Optimizer+ for $(@:zend_optimizerplus_%=%) as it's already integrated as Zend OPcache."
-		
-	# append to extension-load-config (IMPORTANT: must be loaded _before_ Xdebug!)
-	echo -e "; Zend OPcache\nzend_extension = $(shell $(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/php-config --extension-dir)/opcache.so\n" \
-		>>$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/etc/conf.d/extensions.ini
+	
+	$(call CONFIG_load_zend_extension,"Zend OPcache",opcache.so,$(@:zend_optimizerplus_%=%))
 
 zend_optimizerplus_php-53 zend_optimizerplus_php-54:
 	@echo "=== Zend Optimizer+ for $(@:zend_optimizerplus_%=%) version $(ZEND_OPTIMIZERPLUS_VERSION) ==="
@@ -213,10 +218,7 @@ zend_optimizerplus_php-53 zend_optimizerplus_php-54:
 		-F phpize=$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/phpize -F php-config=$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/php-config \
 		$(ZEND_OPTIMIZERPLUS_PKG) install
 	
-	# append to extension-load-config (IMPORTANT: must be loaded _before_ Xdebug!)
-	echo -e "; Zend OPcache\nzend_extension = $(shell $(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/php-config --extension-dir)/opcache.so\n" \
-		>>$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/etc/conf.d/extensions.ini
-
+	$(call CONFIG_load_zend_extension,"Zend OPcache",opcache.so,$(@:zend_optimizerplus_%=%))
 
 # Xdebug
 # ======
@@ -227,9 +229,7 @@ xdebug_php-%:
 		-F phpize=$(PREFIX)/local/$(@:xdebug_%=%)/bin/phpize -F php-config=$(PREFIX)/local/$(@:xdebug_%=%)/bin/php-config \
 		$(XDEBUG_PKG) install
 	
-	# append to extension-load-config
-	echo -e "; Xdebug\nzend_extension = $(shell $(PREFIX)/local/$(@:xdebug_%=%)/bin/php-config --extension-dir)/xdebug.so\n" \
-		>>$(PREFIX)/local/$(@:xdebug_%=%)/etc/conf.d/extensions.ini
+	$(call CONFIG_load_zend_extension,"Xdebug",xdebug.so,$(@:xdebug_%=%))
 
 # 2.2.1 and master (2013-02-23) won't compile for PHP-5.5-dev and PHP-master
 #xdebug_php-55 xdebug_php-master:
