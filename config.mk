@@ -1,6 +1,12 @@
-# The webserver user/group
+# Target config
 WWW_USER = $(USER)
 WWW_GROUP = $(USER)
+WWW_SERVER_NAME = webdev-env
+WWW_SERVER_ADMIN = admin@webdev-env
+HTTP_PORT = 8080
+HTTPS_PORT = 8443
+FCGID_DEFAULT_PHP_WRAPPER = $(PREFIX)/local/bin/php-54-wrapper
+
 
 # Command to gain super user privileges
 SUDO = sudo

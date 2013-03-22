@@ -26,9 +26,20 @@ include config.mk
 
 all: apache apache_modules subversion php php_extensions post_config
 
-post_config:
-	find $(PREFIX) -type f | xargs sed -i 's/{{WEBDEV_ENV_PATH}}/$(subst /,\/,$(PREFIX))/g'
-	
+post_config: config_replace config_demo_index
+
+config_replace:
+	find $(PREFIX) -type f | xargs sed -i \
+		-e 's/{{WEBDEV_ENV_PATH}}/$(subst /,\/,$(PREFIX))/g' \
+		-e 's/{{WEBDEV_ENV_WWW_USER}}/$(WWW_USER)/g' \
+		-e 's/{{WEBDEV_ENV_WWW_GROUP}}/$(WWW_GROUP)/g' \
+		-e 's/{{WEBDEV_ENV_WWW_SERVER_NAME}}/$(WWW_SERVER_NAME)/g' \
+		-e 's/{{WEBDEV_ENV_WWW_SERVER_ADMIN}}/$(WWW_SERVER_ADMIN)/g' \
+		-e 's/{{WEBDEV_ENV_HTTP_PORT}}/$(HTTP_PORT)/g' \
+		-e 's/{{WEBDEV_ENV_HTTPS_PORT}}/$(HTTPS_PORT)/g' \
+		-e 's/{{WEBDEV_ENV_FCGID_DEFAULT_PHP_WRAPPER}}/$(subst /,\/,$(FCGID_DEFAULT_PHP_WRAPPER))/g'
+
+config_demo_index:
 	mkdir -p $(PREFIX)/var/www
 	echo '<?php phpinfo();' >$(PREFIX)/var/www/index.php
 
@@ -173,8 +184,8 @@ php-%_config: php-%_install
 
 php_extensions: $(PHP:%=zend_optimizerplus_%) $(PHP:%=xdebug_%)
 
-# Zend Optimizer+ (now "Zend OPcache" and merged into >=PHP-5.5)
-# ==============================================================
+# Zend Optimizer+ (as of >=PHP-5.5 "Zend OPcache" and merged into PHP)
+# ====================================================================
 $(PHP:%=zend_optimizerplus_%):
 	@echo "Not building Zend Optimizer+ for $(@:zend_optimizerplus_%=%) as it's already integrated as Zend OPcache."
 		
