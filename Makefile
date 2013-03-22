@@ -22,6 +22,7 @@ FILES = $(CURDIR)/files
 # include custom build/target options
 include config.mk
 
+
 ################################################################################
 
 all: apache apache_modules subversion php php_extensions post_config
@@ -46,6 +47,7 @@ config_demo_index:
 clean:
 	-[ -n "$(PKGBOX_BUILD)" ] && rm -rf $(PKGBOX_BUILD)/* || echo "Oops... PKGBOX_BUILD not defined!"
 
+
 ################################################################################
 # Apache Portable Runtime
 
@@ -56,6 +58,7 @@ apr_build:
 
 apr_install: apr_build
 	$(PKGBOX) -V $(APR_VERSION) $(APR_PKG) install
+
 
 ################################################################################
 # Apache Portable Runtime Utility
@@ -68,6 +71,7 @@ apr-util_build: apr
 apr-util_install: apr-util_build
 	$(PKGBOX) -V $(APR_UTIL_VERSION) $(APR_UTIL_PKG) install
 
+
 ################################################################################
 # HTTP client library built upon APR
 
@@ -78,6 +82,7 @@ serf_build: apr-util
 
 serf_install: serf_build
 	$(PKGBOX) -V $(SERF_VERSION) $(SERF_PKG) install
+
 
 ################################################################################
 # Apache httpd
@@ -97,10 +102,12 @@ apache_config: apache_install
 	$(SUDO) mkdir -p $(PREFIX)/var/apache2
 	$(SUDO) chown -R $(WWW_USER):$(WWW_GROUP) $(PREFIX)/var/apache2
 
+
 ################################################################################
 # Apache modules
 
 apache_modules: mod_fcgid mod_macro
+
 
 ################################################################################
 # Apache mod_fcgid
@@ -113,6 +120,7 @@ mod_fcgid_build: apache
 mod_fcgid_install: mod_fcgid_build
 	$(PKGBOX) -V $(MOD_FCGID_VERSION) $(MOD_FCGID_PKG) install
 
+
 ################################################################################
 # Apache mod_macro
 
@@ -124,6 +132,7 @@ mod_macro_build: apache
 mod_macro_install: mod_macro_build
 	$(PKGBOX) -V $(MOD_MACRO_VERSION) $(MOD_MACRO_PKG) install
 
+
 ################################################################################
 # Apache Subversion and mod_dav_svn
 
@@ -134,6 +143,7 @@ subversion_build: apache
 
 subversion_install: subversion_build
 	$(PKGBOX) -V $(SUBVERSION_VERSION) $(SUBVERSION_PKG) install
+
 
 ################################################################################
 # PHP
@@ -179,14 +189,17 @@ php-%_config: php-%_install
 	rm -f $(PREFIX)/local/bin/$(@:%_config=%)-wrapper
 	ln -s php-wrapper $(PREFIX)/local/bin/$(@:%_config=%)-wrapper
 
+
 ################################################################################
 # PHP Extensions
 
+# build extensions for all PHP instances by default
 php_extensions: $(PHP:%=zend_optimizerplus_%) $(PHP:%=xdebug_%)
+
 
 # Zend Optimizer+ (as of >=PHP-5.5 "Zend OPcache" and merged into PHP)
 # ====================================================================
-$(PHP:%=zend_optimizerplus_%):
+zend_optimizerplus_php-%:
 	@echo "Not building Zend Optimizer+ for $(@:zend_optimizerplus_%=%) as it's already integrated as Zend OPcache."
 		
 	# append to extension-load-config (IMPORTANT: must be loaded _before_ Xdebug!)
@@ -204,9 +217,10 @@ zend_optimizerplus_php-53 zend_optimizerplus_php-54:
 	echo -e "; Zend OPcache\nzend_extension = $(shell $(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/php-config --extension-dir)/opcache.so\n" \
 		>>$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/etc/conf.d/extensions.ini
 
+
 # Xdebug
 # ======
-$(PHP:%=xdebug_%):
+xdebug_php-%:
 	@echo "=== Xdebug for $(@:xdebug_%=%) version $(XDEBUG_VERSION) ==="
 	$(PKGBOX) -V $(XDEBUG_VERSION) \
 		-D build=$(PKGBOX_BUILD)/$(@:xdebug_%=%) -D prefix=$(PREFIX)/local/$(@:xdebug_%=%) \
