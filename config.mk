@@ -1,15 +1,16 @@
 # Target config
-WWW_USER = $(USER)
-WWW_GROUP = $(USER)
-WWW_SERVER_NAME = webdev-env
-WWW_SERVER_ADMIN = admin@webdev-env
-HTTP_PORT = 8080
-HTTPS_PORT = 8443
-FCGID_DEFAULT_PHP_WRAPPER = $(PREFIX)/local/bin/php-54-wrapper
+WWW_USER := $(USER)
+WWW_GROUP := $(USER)
+WWW_SERVER_NAME := webdev-env
+WWW_SERVER_ADMIN := admin@webdev-env
+WWW_ROOTPATH := $(PREFIX)/var/www
+HTTP_PORT := 8080
+HTTPS_PORT := 8443
+FCGID_DEFAULT_PHP_WRAPPER := $(PREFIX)/local/bin/php-54-wrapper
 
 
 # Command to gain super user privileges
-SUDO = sudo
+SUDO := sudo
 
 ################################################################################
 
@@ -46,6 +47,7 @@ PHP_53_VERSION = 5.3.23
 PHP_54_VERSION = 5.4.13
 PHP_55_VERSION = PHP-5.5
 PHP_master_VERSION = master
+# last known good version: 6cae773
 
 # PHP instances to build
 PHP = php-53 php-54 php-55 php-master
@@ -53,7 +55,9 @@ PHP = php-53 php-54 php-55 php-master
 
 ZEND_OPTIMIZERPLUS_PKG = dev-php/pecl-zendoptimizerplus
 ZEND_OPTIMIZERPLUS_VERSION = master
+# last known good version: 41f4a58
 
 XDEBUG_PKG = dev-php/xdebug
 XDEBUG_VERSION = xdebug_2_2
+# last known good version: b1ce1e3
 

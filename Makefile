@@ -36,13 +36,14 @@ config_replace:
 		-e 's/{{WEBDEV_ENV_WWW_GROUP}}/$(WWW_GROUP)/g' \
 		-e 's/{{WEBDEV_ENV_WWW_SERVER_NAME}}/$(WWW_SERVER_NAME)/g' \
 		-e 's/{{WEBDEV_ENV_WWW_SERVER_ADMIN}}/$(WWW_SERVER_ADMIN)/g' \
+		-e 's/{{WEBDEV_ENV_WWW_ROOTPATH}}/$(WWW_ROOTPATH)/g' \
 		-e 's/{{WEBDEV_ENV_HTTP_PORT}}/$(HTTP_PORT)/g' \
 		-e 's/{{WEBDEV_ENV_HTTPS_PORT}}/$(HTTPS_PORT)/g' \
 		-e 's/{{WEBDEV_ENV_FCGID_DEFAULT_PHP_WRAPPER}}/$(subst /,\/,$(FCGID_DEFAULT_PHP_WRAPPER))/g'
 
-config_demo_index: $(PREFIX)/var/www/index.php
-	mkdir -p $(PREFIX)/var/www
-	echo '<?php phpinfo();' >$(PREFIX)/var/www/index.php
+config_demo_index: $(WWW_ROOTPATH)/index.php
+	mkdir -p $(WWW_ROOTPATH)
+	echo '<?php phpinfo();' >$(WWW_ROOTPATH)/index.php
 
 clean:
 ifneq (,$(PKGBOX_BUILD))
