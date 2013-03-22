@@ -15,7 +15,7 @@ PKGBOX_PKG := $(call cfgval,packages)
 PKGBOX_BUILD := $(call cfgval,build)
 PREFIX := $(call cfgval,prefix)
 
-PKGBOX = $(CURDIR)/pkgbox/pkgbox -vv -c "$(PKGBOX_CONFIG)"
+PKGBOX = $(CURDIR)/pkgbox/pkgbox -v -c "$(PKGBOX_CONFIG)"
 
 FILES = $(CURDIR)/files
 
