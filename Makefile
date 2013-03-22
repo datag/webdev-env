@@ -27,7 +27,7 @@ include config.mk
 
 all: apache apache_modules subversion php php_extensions post_config
 
-post_config: config_replace config_demo_index
+post_config: config_replace config_demo
 
 config_replace:
 	find $(PREFIX) -type f | xargs sed -i \
@@ -41,9 +41,12 @@ config_replace:
 		-e 's/{{WEBDEV_ENV_HTTPS_PORT}}/$(HTTPS_PORT)/g' \
 		-e 's/{{WEBDEV_ENV_FCGID_DEFAULT_PHP_WRAPPER}}/$(subst /,\/,$(FCGID_DEFAULT_PHP_WRAPPER))/g'
 
-config_demo_index: $(WWW_ROOTPATH)/index.php
+config_demo: $(WWW_ROOTPATH)/index.php
+
+$(WWW_ROOTPATH)/index.php:
 	mkdir -p $(WWW_ROOTPATH)
 	echo '<?php phpinfo();' >$(WWW_ROOTPATH)/index.php
+
 
 clean:
 ifneq (,$(PKGBOX_BUILD))
