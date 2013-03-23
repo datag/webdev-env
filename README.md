@@ -6,6 +6,29 @@ Required software such as a webserver and scripting languages are built from
 source code and will be provided with a default configuration.
 
 
+## What does it do? ##
+
+Currently this project is heavily aimed at a "LAMP"-like system. However, one
+future goal is to provide a generic and modular development environment for web
+development related tasks.
+
+This is the current setup (as of 2013-03-23):
+
+* **Apache**-2.4 (latest stable)
+  * **mod\_fcgid** (FastCGI implementation)
+  * **mod\_macro** (Support for basic configuration templates)
+* Multiple concurrent **PHP** instances
+  * PHP-5.3 (latest stable)
+  * PHP-5.4 (latest stable)
+  * PHP-5.5 (branch PHP-5.5; to be released soon)
+  * PHP-master (branch master; bleeding edge preview of PHP-5.6)
+* External PHP extensions (for each PHP instance)
+  * **Zend OPcache** (formerly Zend Optimizer+, which was merged into PHP as of PHP-5.5)
+  * **Xdebug** (Debugger/Profiler)
+* **MySQL**-5.6 (latest stable)
+* **Subversion**-1.7 (latest stable) serving repositories via Apache2-DAV module
+
+
 ## How to setup? ##
 
 The build system used is [pkgbox](https://github.com/datag/pkgbox).
