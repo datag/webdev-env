@@ -25,7 +25,7 @@ include config.mk
 
 ################################################################################
 
-all: apache apache_modules subversion php php_extensions post_config
+all: apache apache_modules subversion php php_extensions mysql post_config
 
 post_config: config_replace config_demo
 
@@ -250,6 +250,25 @@ xdebug_php-%:
 # 2.2.1 and master (2013-02-23) won't compile for PHP-5.5-dev and PHP-master
 #xdebug_php-55 xdebug_php-master:
 #	@echo "Xdebug $(XDEBUG_VERSION) for $(@:xdebug_%=%) won't compile; skipping..."
+
+
+################################################################################
+# MySQL
+
+mysql: mysql_config
+
+mysql_build:
+	$(PKGBOX) -V $(MYSQL_VERSION) $(MYSQL_PKG) compile
+
+mysql_install: mysql_build
+	$(PKGBOX) -V $(MYSQL_VERSION) $(MYSQL_PKG) install
+	#rm -rf $(PREFIX)/local/mysql/mysql-test
+
+mysql_config: mysql_install
+	mkdir -p $(PREFIX)/local/mysql/etc/mysql
+	cp -rvt $(PREFIX)/local/mysql/etc/mysql $(FILES)/mysql/config/*
+	
+	( cd $(PREFIX)/local/mysql && ./scripts/mysql_install_db --no-defaults )
 
 ################################################################################
 
