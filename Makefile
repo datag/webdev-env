@@ -1,7 +1,7 @@
 ################################################################################
 # webdev-env Makefile
 #
-# Copyright 2013  Dominik D. Geyer <dominik.geyer@gmail.com>
+# Author: Dominik D. Geyer <dominik.geyer@gmail.com>
 # License: GPLv3
 ################################################################################
 
