@@ -25,7 +25,8 @@ include config.mk
 
 ################################################################################
 
-all: apache apache_modules subversion php php_extensions mysql post_config
+all: apache apache_modules subversion php php_extensions post_config
+# DISABLED in all: mysql
 
 post_config: config_replace config_demo
 
