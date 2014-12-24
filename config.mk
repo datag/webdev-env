@@ -43,8 +43,8 @@ SUBVERSION_VERSION = 1.7.8
 
 # === PHP and extensions ===
 PHP_PKG = dev-lang/php
-PHP_53_VERSION = 5.3.23
-PHP_54_VERSION = 5.4.13
+PHP_53_VERSION = PHP-5.3
+PHP_54_VERSION = PHP-5.4
 PHP_55_VERSION = PHP-5.5
 PHP_master_VERSION = master
 # last known good version: 6cae773
