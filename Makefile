@@ -204,7 +204,7 @@ php-%_config: php-%_install
 # PHP Extensions
 
 # build extensions for all PHP instances by default
-php_extensions: $(PHP:%=zend_optimizerplus_%) $(PHP:%=xdebug_%)
+php_extensions: $(PHP:%=zend_opcache_%) $(PHP:%=xdebug_%)
 
 # enable PHP Zend extension; (CONFIG_load_zend_extension,title,extension,PHP-target)
 define CONFIG_load_zend_extension
@@ -220,21 +220,21 @@ else \
 fi
 endef
 
-# Zend Optimizer+ (as of >=PHP-5.5 "Zend OPcache" and merged into PHP)
+# Zend OPcache (bundled since >=PHP-5.5)
 # ====================================================================
-zend_optimizerplus_php-%:
-	@echo "Not building Zend Optimizer+ for $(@:zend_optimizerplus_%=%) as it's already integrated as Zend OPcache."
+zend_opcache_php-%:
+	@echo "Not building Zend OPcache for $(@:zend_opcache_%=%) as it's already bundled."
 	
-	$(call CONFIG_load_zend_extension,"Zend OPcache",opcache.so,$(@:zend_optimizerplus_%=%))
+	$(call CONFIG_load_zend_extension,"Zend OPcache",opcache.so,$(@:zend_opcache_%=%))
 
-zend_optimizerplus_php-53 zend_optimizerplus_php-54:
-	@echo "=== Zend Optimizer+ for $(@:zend_optimizerplus_%=%) version $(ZEND_OPTIMIZERPLUS_VERSION) ==="
-	$(PKGBOX) -V $(ZEND_OPTIMIZERPLUS_VERSION) \
-		-D build=$(PKGBOX_BUILD)/$(@:zend_optimizerplus_%=%) -D prefix=$(PREFIX)/local/$(@:zend_optimizerplus_%=%) \
-		-F phpize=$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/phpize -F php-config=$(PREFIX)/local/$(@:zend_optimizerplus_%=%)/bin/php-config \
-		$(ZEND_OPTIMIZERPLUS_PKG) install
+zend_opcache_php-53 zend_opcache_php-54:
+	@echo "=== Zend Optimizer+ for $(@:zend_opcache_%=%) version $(ZEND_OPCACHE_VERSION) ==="
+	$(PKGBOX) -V $(ZEND_OPCACHE_VERSION) \
+		-D build=$(PKGBOX_BUILD)/$(@:zend_opcache_%=%) -D prefix=$(PREFIX)/local/$(@:zend_opcache_%=%) \
+		-F phpize=$(PREFIX)/local/$(@:zend_opcache_%=%)/bin/phpize -F php-config=$(PREFIX)/local/$(@:zend_opcache_%=%)/bin/php-config \
+		$(ZEND_OPCACHE_PKG) install
 	
-	$(call CONFIG_load_zend_extension,"Zend OPcache",opcache.so,$(@:zend_optimizerplus_%=%))
+	$(call CONFIG_load_zend_extension,"Zend OPcache",opcache.so,$(@:zend_opcache_%=%))
 
 # Xdebug
 # ======

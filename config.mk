@@ -53,8 +53,8 @@ PHP_master_VERSION = master
 PHP = php-53 php-54 php-55 php-master
 
 
-ZEND_OPTIMIZERPLUS_PKG = dev-php/pecl-zendoptimizerplus
-ZEND_OPTIMIZERPLUS_VERSION = master
+ZEND_OPCACHE_PKG = dev-php/pecl-zendopcache
+ZEND_OPCACHE_VERSION = master
 # last known good version: 41f4a58
 
 XDEBUG_PKG = dev-php/xdebug
