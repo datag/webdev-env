@@ -247,9 +247,9 @@ xdebug_php-%:
 	
 	$(call CONFIG_load_zend_extension,"Xdebug",xdebug.so,$(@:xdebug_%=%))
 
-# 2.2.1 and master (2013-02-23) won't compile for PHP-5.5-dev and PHP-master
-#xdebug_php-55 xdebug_php-master:
-#	@echo "Xdebug $(XDEBUG_VERSION) for $(@:xdebug_%=%) won't compile; skipping..."
+# 2014-12-25: Xdebug 2.2.x (and master, too) won't compile for PHP-master
+xdebug_php-master:
+	@echo "Xdebug $(XDEBUG_VERSION) for $(@:xdebug_%=%) won't compile; skipping..."
 
 
 ################################################################################
