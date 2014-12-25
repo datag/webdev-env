@@ -20,10 +20,10 @@ SUDO := sudo
 
 # === Misc libraries ===
 APR_PKG = dev-libs/apr
-APR_VERSION = 1.4.6
+APR_VERSION = 1.5.1
 
 APR_UTIL_PKG = dev-libs/apr-util
-APR_UTIL_VERSION = 1.5.1
+APR_UTIL_VERSION = 1.5.4
 
 SERF_PKG = net-libs/serf
 SERF_VERSION = 1.2.0
@@ -31,10 +31,10 @@ SERF_VERSION = 1.2.0
 
 # === Apache and modules ===
 APACHE_PKG = www-servers/apache
-APACHE_VERSION = 2.4.3
+APACHE_VERSION = 2.4.10
 
-MOD_FCGID_PKG = www-apache/mod_fcgid
-MOD_FCGID_VERSION = 2.3.7
+#MOD_FCGID_PKG = www-apache/mod_fcgid
+#MOD_FCGID_VERSION = 2.3.7
 
 MOD_MACRO_PKG = www-apache/mod_macro
 MOD_MACRO_VERSION = 1.2.1
@@ -55,7 +55,8 @@ PHP_master_VERSION = master
 # last known good version: 0c45d1d
 
 # PHP instances to build
-PHP = php-53 php-54 php-55 php-56 php-master
+#PHP = php-53 php-54 php-55 php-56 php-master
+PHP = php-53 php-54
 
 
 ZEND_OPCACHE_PKG = dev-php/pecl-zendopcache
@@ -68,6 +69,6 @@ XDEBUG_VERSION = xdebug_2_2
 
 
 # === MySQL ===
-MYSQL_PKG = dev-db/mysql
-MYSQL_VERSION = 5.6.10
+#MYSQL_PKG = dev-db/mysql
+#MYSQL_VERSION = 5.6.10
 
