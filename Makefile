@@ -139,7 +139,7 @@ mod_macro_install: mod_macro_build
 
 
 ################################################################################
-# Apache Subversion and mod_dav_svn
+# Apache Subversion (with mod_dav_svn)
 
 subversion: subversion_install
 
@@ -159,7 +159,7 @@ php: $(PHP)
 php_tgt2ver = $($(subst php-,PHP_,$(1))_VERSION)
 
 php_commonsetup:
-	# Nothing to do
+	# No common PHP setup
 
 php-%: php_commonsetup php-%_config
 	@echo Done with PHP $@ version $($(subst php-,PHP_,$@)_VERSION)
@@ -254,10 +254,11 @@ mariadb_build:
 
 mariadb_install: mariadb_build
 	$(PKGBOX) -V $(MARIADB_VERSION) $(MARIADB_PKG) install
+	rm -rf $(PREFIX)/local/mariadb/mysql-test
 
 mariadb_config: mariadb_install
 	mkdir -p $(PREFIX)/local/mariadb/etc
-	cp -v $(FILES)/mariadb/support-files/my-medium.cnf $(PREFIX)/local/mariadb/etc/my.cnf
+	cp -vt $(PREFIX)/local/mariadb/etc $(FILES)/mysql/config/my.cnf
 	
 	( cd $(PREFIX)/local/mariadb && ./scripts/mysql_install_db --defaults-file=$(PREFIX)/local/mariadb/etc/my.cnf )
 
