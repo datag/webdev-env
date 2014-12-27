@@ -25,7 +25,10 @@ include config.mk
 
 ################################################################################
 
-all: apache apache_modules subversion php php_extensions post_config
+all: apache apache_modules subversion php php_extensions
+
+# MANUALLY: post_config
+
 # DISABLED in all: mysql
 
 post_config: config_replace config_demo
@@ -39,8 +42,7 @@ config_replace:
 		-e 's/{{WEBDEV_ENV_WWW_SERVER_ADMIN}}/$(WWW_SERVER_ADMIN)/g' \
 		-e 's/{{WEBDEV_ENV_WWW_ROOTPATH}}/$(subst /,\/,$(WWW_ROOTPATH))/g' \
 		-e 's/{{WEBDEV_ENV_HTTP_PORT}}/$(HTTP_PORT)/g' \
-		-e 's/{{WEBDEV_ENV_HTTPS_PORT}}/$(HTTPS_PORT)/g' \
-		-e 's/{{WEBDEV_ENV_FCGID_DEFAULT_PHP_WRAPPER}}/$(subst /,\/,$(FCGID_DEFAULT_PHP_WRAPPER))/g'
+		-e 's/{{WEBDEV_ENV_HTTPS_PORT}}/$(HTTPS_PORT)/g'
 
 config_demo: $(WWW_ROOTPATH)/index.php
 
@@ -116,19 +118,6 @@ apache_config: apache_install
 # Apache modules
 
 apache_modules: mod_macro
-# DISABLED: mod_fcgid
-
-
-################################################################################
-## Apache mod_fcgid
-#
-#mod_fcgid: mod_fcgid_install
-#
-#mod_fcgid_build: apache
-#	$(PKGBOX) -V $(MOD_FCGID_VERSION) $(MOD_FCGID_PKG) compile
-#
-#mod_fcgid_install: mod_fcgid_build
-#	$(PKGBOX) -V $(MOD_FCGID_VERSION) $(MOD_FCGID_PKG) install
 
 
 ################################################################################
@@ -164,9 +153,7 @@ php: $(PHP)
 php_tgt2ver = $($(subst php-,PHP_,$(1))_VERSION)
 
 php_commonsetup:
-	mkdir -p $(PREFIX)/local/bin
-	$(SUDO) cp -vt $(PREFIX)/local/bin $(FILES)/php/php-wrapper
-	$(SUDO) chown $(WWW_USER):$(WWW_GROUP) $(PREFIX)/local/bin/php-wrapper
+	# Nothing to do
 
 php-%: php_commonsetup php-%_config
 	@echo Done with PHP $@ version $($(subst php-,PHP_,$@)_VERSION)
@@ -175,6 +162,7 @@ php-%_build:
 	$(PKGBOX) -V $(call php_tgt2ver,$(@:%_build=%)) \
 		-D prefix=$(PREFIX)/local/php-$(call php_tgt2ver,$(@:%_build=%)) \
 		-F -apxs \
+		-F php:fpm \
 		-F php:config-file-path=$(PREFIX)/local/php-$(call php_tgt2ver,$(@:%_build=%))/etc \
 		-F php:config-file-scan-dir=$(PREFIX)/local/php-$(call php_tgt2ver,$(@:%_build=%))/etc/conf.d \
 		$(PHP_PKG) compile
@@ -195,11 +183,7 @@ php-%_config: php-%_install
 	
 	# configuration
 	mkdir -p $(PREFIX)/local/$(@:%_config=%)/etc
-	cp -rvt $(PREFIX)/local/$(@:%_config=%)/etc $(FILES)/php/php.ini $(FILES)/php/conf.d
-	
-	# fcgid-wrapper 
-	rm -f $(PREFIX)/local/bin/$(@:%_config=%)-wrapper
-	ln -s php-wrapper $(PREFIX)/local/bin/$(@:%_config=%)-wrapper
+	cp -rvt $(PREFIX)/local/$(@:%_config=%)/etc $(FILES)/php/php-fpm.conf $(FILES)/php/php.ini $(FILES)/php/conf.d
 
 
 ################################################################################

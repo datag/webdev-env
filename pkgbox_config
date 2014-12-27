@@ -40,7 +40,5 @@ FEATURES+=(
 	"apr=${O[prefix]}"
 	"apr-util=${O[prefix]}"
 	"apxs=${O[prefix]}/bin/apxs"
-	
-	"php:fpm"
 )
 

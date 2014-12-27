@@ -10,7 +10,6 @@ WWW_SERVER_ADMIN := admin@webdev-env
 WWW_ROOTPATH := $(PREFIX)/var/www
 HTTP_PORT := 8080
 HTTPS_PORT := 8443
-FCGID_DEFAULT_PHP_WRAPPER := $(PREFIX)/local/bin/php-54-wrapper
 
 
 # Command to gain super user privileges
