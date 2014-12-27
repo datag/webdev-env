@@ -42,3 +42,6 @@ FEATURES+=(
 	"apxs=${O[prefix]}/bin/apxs"
 )
 
+# misc: older PHP requires old autoconf
+export PHP_AUTOCONF=autoconf-2.59
+
