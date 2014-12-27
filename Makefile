@@ -25,7 +25,7 @@ include config.mk
 
 ################################################################################
 
-all: apache apache_modules subversion php php_extensions
+all: apache apache_modules subversion php php_extensions common
 
 # MANUALLY: post_config
 
@@ -57,6 +57,14 @@ ifneq (,$(PKGBOX_BUILD))
 else
 	$(error "Oops... PKGBOX_BUILD not defined or empty!")
 endif
+
+
+################################################################################
+# common
+
+common:
+	mkdir -pv $(PREFIX)/local/sbin
+	cp -vt $(PREFIX)/local/sbin $(FILES)/server_start.sh
 
 
 ################################################################################
