@@ -32,9 +32,6 @@ SERF_VERSION = 1.2.0
 APACHE_PKG = www-servers/apache
 APACHE_VERSION = 2.4.10
 
-#MOD_FCGID_PKG = www-apache/mod_fcgid
-#MOD_FCGID_VERSION = 2.3.7
-
 MOD_MACRO_PKG = www-apache/mod_macro
 MOD_MACRO_VERSION = 1.2.1
 
