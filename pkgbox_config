@@ -35,6 +35,7 @@ FEATURES+=(
 	"ssl=/usr"						# SSL support
 	"devrandom=/dev/urandom"	# Set random device, e.g. /dev/urandom
 	
+	"mysql:socket=/tmp/mysqld.sock"
 	
 # Build/config tools
 	"apr=${O[prefix]}"

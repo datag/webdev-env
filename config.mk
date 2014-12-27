@@ -64,7 +64,7 @@ XDEBUG_VERSION = xdebug_2_2
 # last known good version: b1ce1e3
 
 
-# === MySQL ===
-#MYSQL_PKG = dev-db/mysql
-#MYSQL_VERSION = 5.6.10
+# === MariaDB ===
+MARIADB_PKG = dev-db/mariadb
+MARIADB_VERSION = 10.0.15
 
