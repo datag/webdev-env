@@ -51,8 +51,7 @@ PHP_master_VERSION = master
 # last known good version: 0c45d1d
 
 # PHP instances to build
-#PHP = php-53 php-54 php-55 php-56 php-master
-PHP = php-53 php-54
+PHP = php-53 php-54 php-55 php-56 php-master
 
 
 ZEND_OPCACHE_PKG = dev-php/pecl-zendopcache
