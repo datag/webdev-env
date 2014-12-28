@@ -2,7 +2,7 @@
 ################################################################################
 
 # pkgbox directories
-O[base]="$PWD/pkgbox_base"
+O[base]="$PWD/pkgbase"
 O[packages]="$PWD/pkg"
 O[download]="${O[base]}/download"
 O[build]="${O[base]}/build"
