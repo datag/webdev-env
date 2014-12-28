@@ -4,7 +4,7 @@ PREFIX={{WEBDEV_ENV_PATH}}
 
 if [[ $1 == start ]]; then
 
-	find $PREFIX/local -type d -name 'php-*' | while read d; do
+	find $PREFIX/local -maxdepth 1 -type d -name 'php-*' | while read d; do
 		$d/sbin/php-fpm -y $d/etc/php-fpm.conf -c $d/etc/php.ini
 	done
 
