@@ -13,7 +13,7 @@ HTTPS_PORT := 8443
 
 
 # Command to gain super user privileges
-SUDO := sudo
+SUDO := $(call cfgval,sudo)
 
 ################################################################################
 
