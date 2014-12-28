@@ -94,6 +94,9 @@ serf_build: apr-util
 	$(PKGBOX) -V $(SERF_VERSION) $(SERF_PKG) compile
 
 serf_install: serf_build
+	# Scons workaround
+	-$(SUDO) rm -fv $(PREFIX)/libserf*.so
+	
 	$(PKGBOX) -V $(SERF_VERSION) $(SERF_PKG) install
 
 
