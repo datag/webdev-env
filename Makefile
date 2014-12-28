@@ -143,7 +143,7 @@ mod_macro_install: mod_macro_build
 
 subversion: subversion_install
 
-subversion_build: apache
+subversion_build: apache serf
 	$(PKGBOX) -V $(SUBVERSION_VERSION) $(SUBVERSION_PKG) compile
 
 subversion_install: subversion_build

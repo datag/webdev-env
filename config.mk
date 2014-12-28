@@ -25,7 +25,7 @@ APR_UTIL_PKG = dev-libs/apr-util
 APR_UTIL_VERSION = 1.5.4
 
 SERF_PKG = net-libs/serf
-SERF_VERSION = 1.2.0
+SERF_VERSION = 1.3.8
 
 
 # === Apache and modules ===
