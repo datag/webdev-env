@@ -259,6 +259,9 @@ mariadb_config: mariadb_install
 	mkdir -p $(PREFIX)/local/mariadb/etc
 	cp -vt $(PREFIX)/local/mariadb/etc $(FILES)/mysql/config/my.cnf
 	
+	# FIXME: use pkgbox-configured
+	sed -i -e "s~^# datadir = .....~datadir = $(PREFIX)/var/mysql/data~" $(PREFIX)/local/mariadb/etc/my.cnf
+	
 	( cd $(PREFIX)/local/mariadb && ./scripts/mysql_install_db --defaults-file=$(PREFIX)/local/mariadb/etc/my.cnf )
 
 ################################################################################
