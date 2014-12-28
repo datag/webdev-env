@@ -62,7 +62,7 @@ endif
 
 common:
 	mkdir -pv $(PREFIX)/local/sbin
-	cp -vt $(PREFIX)/local/sbin $(FILES)/server_start.sh
+	cp -vt $(PREFIX)/local/sbin $(FILES)/server_test.sh
 
 
 ################################################################################
