@@ -38,7 +38,7 @@ MOD_MACRO_VERSION = 1.2.1
 
 # === Subversion ===
 SUBVERSION_PKG = dev-vcs/subversion
-SUBVERSION_VERSION = 1.7.8
+SUBVERSION_VERSION = 1.8.11
 
 
 # === PHP and extensions ===
