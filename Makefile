@@ -25,8 +25,6 @@ include config.mk
 
 ################################################################################
 
-all: apache apache_modules subversion php php_extensions mariadb common post_config
-
 post_config: config_replace config_demo
 
 config_replace:

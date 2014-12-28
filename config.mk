@@ -15,6 +15,12 @@ HTTPS_PORT := 8443
 # Command to gain super user privileges
 SUDO := $(call cfgval,sudo)
 
+
+################################################################################
+# Default targets
+
+all: apache apache_modules subversion php php_extensions mariadb common post_config
+
 ################################################################################
 
 # === Misc libraries ===
