@@ -32,10 +32,11 @@ FEATURES+=(
 	"nls"						# Native language support
 	"unicode"					# Unicode support
 	"ipv6"						# IPv6 support
-	"ssl=/usr"						# SSL support
+	"ssl=/usr"					# SSL support
 	"devrandom=/dev/urandom"	# Set random device, e.g. /dev/urandom
 	
-	"mysql:socket=/tmp/mysqld.sock"
+	"mysql:datadir=${O[prefix]}/var/mysql/data"
+	"mysql:socket=${O[prefix]}/var/mysql/mysqld.sock"
 	
 # Build/config tools
 	"apr=${O[prefix]}"

@@ -95,7 +95,7 @@ serf_build: apr-util
 
 serf_install: serf_build
 	# Scons workaround
-	-$(SUDO) rm -fv $(PREFIX)/libserf*.so
+	-$(SUDO) rm -fv $(PREFIX)/lib/libserf*.so*
 	
 	$(PKGBOX) -V $(SERF_VERSION) $(SERF_PKG) install
 
@@ -211,7 +211,7 @@ else \
 fi
 endef
 
-# Zend OPcache (bundled since >=PHP-5.5)
+# Zend OPcache (bundled with >=PHP-5.5)
 # ====================================================================
 zend_opcache_php-%:
 	@echo "Not building Zend OPcache for $(@:zend_opcache_%=%) as it's already bundled."
@@ -221,7 +221,7 @@ zend_opcache_php-%:
 zend_opcache_php-53 zend_opcache_php-54:
 	@echo "=== Zend OPcache for $(@:zend_opcache_%=%) version $(ZEND_OPCACHE_VERSION) ==="
 	$(PKGBOX) -V $(ZEND_OPCACHE_VERSION) \
-		-D build=$(PKGBOX_BUILD)/$(@:zend_opcache_%=%) -D prefix=$(PREFIX)/local/$(@:zend_opcache_%=%) \
+		-D build=$(PKGBOX_BUILD)/work/$(@:zend_opcache_%=%)_extensions -D prefix=$(PREFIX)/local/$(@:zend_opcache_%=%) \
 		-F phpize=$(PREFIX)/local/$(@:zend_opcache_%=%)/bin/phpize -F php-config=$(PREFIX)/local/$(@:zend_opcache_%=%)/bin/php-config \
 		$(ZEND_OPCACHE_PKG) install
 	
@@ -232,7 +232,7 @@ zend_opcache_php-53 zend_opcache_php-54:
 xdebug_php-%:
 	@echo "=== Xdebug for $(@:xdebug_%=%) version $(XDEBUG_VERSION) ==="
 	$(PKGBOX) -V $(XDEBUG_VERSION) \
-		-D build=$(PKGBOX_BUILD)/$(@:xdebug_%=%) -D prefix=$(PREFIX)/local/$(@:xdebug_%=%) \
+		-D build=$(PKGBOX_BUILD)/work/$(@:xdebug_%=%)_extensions -D prefix=$(PREFIX)/local/$(@:xdebug_%=%) \
 		-F phpize=$(PREFIX)/local/$(@:xdebug_%=%)/bin/phpize -F php-config=$(PREFIX)/local/$(@:xdebug_%=%)/bin/php-config \
 		$(XDEBUG_PKG) install
 	
