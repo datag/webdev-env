@@ -21,9 +21,10 @@ SUDO := $(call cfgval,sudo)
 
 all: apache apache_modules subversion php php_extensions mariadb common post_config
 
+
 ################################################################################
 
-# === Misc libraries ===
+# === Dependencies ===
 APR_PKG = dev-libs/apr
 APR_VERSION = 1.5.1
 
@@ -49,15 +50,12 @@ SUBVERSION_VERSION = 1.8.11
 
 # === PHP and extensions ===
 PHP_PKG = dev-lang/php
+PHP = php-53 php-54 php-55 php-56 php-master
 PHP_53_VERSION = PHP-5.3
 PHP_54_VERSION = PHP-5.4
 PHP_55_VERSION = PHP-5.5
 PHP_56_VERSION = PHP-5.6
 PHP_master_VERSION = master
-
-
-# PHP instances to build
-PHP = php-53 php-54 php-55 php-56 php-master
 
 # Extension Zend OPcache
 ZEND_OPCACHE_PKG = dev-php/pecl-zendopcache
