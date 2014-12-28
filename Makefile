@@ -220,7 +220,7 @@ zend_opcache_php-%:
 	$(call CONFIG_load_zend_extension,"Zend OPcache",opcache.so,$(@:zend_opcache_%=%))
 
 zend_opcache_php-53 zend_opcache_php-54:
-	@echo "=== Zend Optimizer+ for $(@:zend_opcache_%=%) version $(ZEND_OPCACHE_VERSION) ==="
+	@echo "=== Zend OPcache for $(@:zend_opcache_%=%) version $(ZEND_OPCACHE_VERSION) ==="
 	$(PKGBOX) -V $(ZEND_OPCACHE_VERSION) \
 		-D build=$(PKGBOX_BUILD)/$(@:zend_opcache_%=%) -D prefix=$(PREFIX)/local/$(@:zend_opcache_%=%) \
 		-F phpize=$(PREFIX)/local/$(@:zend_opcache_%=%)/bin/phpize -F php-config=$(PREFIX)/local/$(@:zend_opcache_%=%)/bin/php-config \
