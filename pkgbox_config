@@ -45,5 +45,5 @@ FEATURES+=(
 )
 
 # misc: older PHP requires old autoconf
-export PHP_AUTOCONF=autoconf-2.59
+#export PHP_AUTOCONF=autoconf-2.59
 
