@@ -12,21 +12,22 @@ Currently this project is heavily aimed at a "LAMP"-like system. However, one
 future goal is to provide a generic and modular development environment for web
 development related tasks.
 
-This is the current setup (as of 2013-03-23):
+This is the current setup (as of 2015-06-06):
 
 * **Apache**-2.4 (latest stable)
-  * **mod\_fcgid** (FastCGI implementation)
+  * **PHP-FPM** (FastCGI Process Manager)
   * **mod\_macro** (Support for basic configuration templates)
 * Multiple concurrent **PHP** instances
-  * PHP-5.3 (latest stable)
-  * PHP-5.4 (latest stable)
-  * PHP-5.5 (branch PHP-5.5; to be released soon)
-  * PHP-master (branch master; bleeding edge preview of PHP-5.6)
+  * PHP-5.3 (latest)
+  * PHP-5.4 (latest)
+  * PHP-5.5 (latest)
+  * PHP-5.6 (latest)
+  * PHP-master (branch master)
 * External PHP extensions (for each PHP instance)
   * **Zend OPcache** (formerly Zend Optimizer+, which was merged into PHP as of PHP-5.5)
   * **Xdebug** (Debugger/Profiler)
-* **MySQL**-5.6 (latest stable)
-* **Subversion**-1.7 (latest stable) serving repositories via Apache2-DAV module
+* **MariaDB**-10.0.15
+* **Subversion**-1.8.13 
 
 
 ## How to setup? ##
@@ -36,6 +37,16 @@ Required dependencies (libraries) are in most cases *not* built/installed
 automatically but need to be installed with your distribution's package manager.
 Most packages of webdev-env will be built against installed system libraries and
 is therefore not completely independent.
+
+### Example dependencies for a Debian system ###
+
+    # apt-get install build-essential git scons autoconf automake libtool bison re2c
+    # OLDER bison version might be needed! E.g. Debian jessie; download and install with `dpkg -i`; https://packages.debian.org/wheezy/amd64/libbison-dev/download https://packages.debian.org/wheezy/amd64/bison/download
+
+    # apt-get install libpcre3-dev zlib1g-dev libssl-dev libsqlite3-dev libxml2-dev libcurl4-openssl-dev libbz2-dev libreadline-dev libjpeg-dev libpng12-dev libxpm-dev libfreetype6-dev libmysqlclient-dev libgd2-xpm-dev libgmp-dev libsasl2-dev libmhash-dev unixodbc-dev freetds-dev libpspell-dev libsnmp-dev libtidy-dev libxslt1-dev libmcrypt-dev
+    FIXME
+    
+    ## see also: http://zgadzaj.com/how-to-install-php-53-and-52-together-on-ubuntu-1204
 
 ### pkgbox prerequisites ###
 
